@@ -27,3 +27,4 @@ app.MapControllerRoute(
 
 
 app.Run();
+//dotnet ef dbcontext scaffold "Server=(localdb)\MSSQLLocalDB;Database=GestionPersonalDB;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -o Entities/Domain --context AppDbContext --force --project "C:\Users\alejandro.ortiz\Documents\helpharma\Desarrollos\lissy\lissyHelpharma\AppLissy\Models\Models\Models.csproj"
