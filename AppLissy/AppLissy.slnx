@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="AppLissy/AppLissy.csproj" />
+  <Project Path="Business/Business/Business.csproj" />
+  <Project Path="Data/Data/Data.csproj" />
+  <Project Path="Models/Models/Models.csproj" />
+</Solution>
