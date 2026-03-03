@@ -33,6 +33,8 @@ public partial class Empleado
 
     public DateOnly FechaIngreso { get; set; }
 
+    public bool? SuperNum { get; set; }
+
     public bool Activo { get; set; }
 
     public DateOnly? FechaRetiro { get; set; }
