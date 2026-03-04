@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Data.Interfaces;
+using Data.Repository.Empleado;
+using Microsoft.Extensions.DependencyInjection;
 using Models.Entities.Domain;
 using System;
 using System.Collections.Generic;
@@ -13,7 +15,7 @@ namespace Data.Dependences
 
             #region [ Repository Data Access ]
 
-            //services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IEmpleadoRespository, EmpleadoRespository>();
             //
             #endregion
 

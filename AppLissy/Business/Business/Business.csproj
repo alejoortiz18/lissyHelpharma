@@ -11,8 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BusinessBLL\" />
-    <Folder Include="Interfaces\" />
+    <ProjectReference Include="..\..\Data\Data\Data.csproj" />
   </ItemGroup>
 
 </Project>

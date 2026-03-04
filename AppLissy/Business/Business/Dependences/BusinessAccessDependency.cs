@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Business.BusinessBLL;
+using Business.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +14,7 @@ namespace Business.Dependences
 
             #region [ Repository Data Access ]
 
-            //services.AddScoped<IAuthBusiness, perfil.AuthBusiness>();
+            services.AddScoped<IEmpleadoBusiness, EmpleadoBusiness>();
 
             //
             #endregion

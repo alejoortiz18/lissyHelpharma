@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <Folder Include="DataDT\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Repository\" />
   </ItemGroup>
 
   <ItemGroup>
