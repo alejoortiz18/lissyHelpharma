@@ -13,6 +13,8 @@ public partial class Empleado
 
     public int TipoContratoId { get; set; }
 
+    public int? JefeId { get; set; }
+
     public string TipoIdentificacion { get; set; } = null!;
 
     public string NumeroIdentificacion { get; set; } = null!;
@@ -31,9 +33,9 @@ public partial class Empleado
 
     public string? Correo { get; set; }
 
-    public DateOnly FechaIngreso { get; set; }
+    public DateOnly FechaIngresoDirecto { get; set; }
 
-    public bool? SuperNum { get; set; }
+    public DateOnly? FechaIngresoTemporal { get; set; }
 
     public bool Activo { get; set; }
 
@@ -45,15 +47,21 @@ public partial class Empleado
 
     public virtual Cargo Cargo { get; set; } = null!;
 
+    public virtual ICollection<EventoEmpleado> EventoEmpleadoAutorizadoPorEmpleados { get; set; } = new List<EventoEmpleado>();
+
+    public virtual ICollection<EventoEmpleado> EventoEmpleadoEmpleados { get; set; } = new List<EventoEmpleado>();
+
     public virtual ICollection<HoraExtra> HoraExtras { get; set; } = new List<HoraExtra>();
 
-    public virtual ICollection<HorarioLaboral> HorarioLaborals { get; set; } = new List<HorarioLaboral>();
+    public virtual ICollection<HorarioLaboral> HorarioLaboralEmpleados { get; set; } = new List<HorarioLaboral>();
 
-    public virtual ICollection<Permiso> Permisos { get; set; } = new List<Permiso>();
+    public virtual ICollection<HorarioLaboral> HorarioLaboralProgramadoPorEmpleados { get; set; } = new List<HorarioLaboral>();
+
+    public virtual ICollection<Empleado> InverseJefe { get; set; } = new List<Empleado>();
+
+    public virtual Empleado? Jefe { get; set; }
 
     public virtual Sede Sede { get; set; } = null!;
 
     public virtual TipoContrato TipoContrato { get; set; } = null!;
-
-    public virtual ICollection<Vacacione> Vacaciones { get; set; } = new List<Vacacione>();
 }

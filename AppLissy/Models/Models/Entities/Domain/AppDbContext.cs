@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Models.Dto;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Models.Entities.Domain;
 
@@ -22,23 +21,19 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<EstadoSolicitud> EstadoSolicituds { get; set; }
 
+    public virtual DbSet<EventoEmpleado> EventoEmpleados { get; set; }
+
     public virtual DbSet<HoraExtra> HoraExtras { get; set; }
 
     public virtual DbSet<HorarioLaboral> HorarioLaborals { get; set; }
-
-    public virtual DbSet<Permiso> Permisos { get; set; }
 
     public virtual DbSet<Sede> Sedes { get; set; }
 
     public virtual DbSet<TipoContrato> TipoContratos { get; set; }
 
+    public virtual DbSet<TipoEventoEmpleado> TipoEventoEmpleados { get; set; }
+
     public virtual DbSet<TipoHoraExtra> TipoHoraExtras { get; set; }
-
-    public virtual DbSet<TipoPermiso> TipoPermisos { get; set; }
-
-    public virtual DbSet<Vacacione> Vacaciones { get; set; }
-
-    public DbSet<EmpleadoDto> EmpleadoDto { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -46,11 +41,9 @@ public partial class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<EmpleadoDto>().HasNoKey();
-
         modelBuilder.Entity<Cargo>(entity =>
         {
-            entity.HasKey(e => e.CargoId).HasName("PK__Cargo__B4E665CD2945B0D2");
+            entity.HasKey(e => e.CargoId).HasName("PK__Cargo__B4E665CDD7DBAC38");
 
             entity.ToTable("Cargo");
 
@@ -66,15 +59,13 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Empleado>(entity =>
         {
-            entity.HasKey(e => e.EmpleadoId).HasName("PK__Empleado__958BE9104223CE4E");
+            entity.HasKey(e => e.EmpleadoId).HasName("PK__Empleado__958BE910DF19A769");
 
             entity.ToTable("Empleado");
 
-            entity.HasIndex(e => e.NumeroIdentificacion, "IX_Empleado_NumeroIdentificacion");
+            entity.HasIndex(e => e.NumeroIdentificacion, "UQ__Empleado__FCA68D91AD6476A3").IsUnique();
 
-            entity.HasIndex(e => e.NumeroIdentificacion, "UQ__Empleado__FCA68D91A154C41B").IsUnique();
-
-            entity.Property(e => e.Activo).HasDefaultValue(true, "DF__Empleado__Activo__6FE99F9F");
+            entity.Property(e => e.Activo).HasDefaultValue(true);
             entity.Property(e => e.Apellidos)
                 .HasMaxLength(150)
                 .IsUnicode(false);
@@ -84,7 +75,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Direccion)
                 .HasMaxLength(250)
                 .IsUnicode(false);
-            entity.Property(e => e.FechaCreacion).HasDefaultValueSql("(sysdatetime())", "DF__Empleado__FechaC__70DDC3D8");
+            entity.Property(e => e.FechaCreacion).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.Genero)
                 .HasMaxLength(20)
                 .IsUnicode(false);
@@ -109,6 +100,10 @@ public partial class AppDbContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Empleado_Cargo");
 
+            entity.HasOne(d => d.Jefe).WithMany(p => p.InverseJefe)
+                .HasForeignKey(d => d.JefeId)
+                .HasConstraintName("FK_Empleado_Jefe");
+
             entity.HasOne(d => d.Sede).WithMany(p => p.Empleados)
                 .HasForeignKey(d => d.SedeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -122,7 +117,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<EstadoSolicitud>(entity =>
         {
-            entity.HasKey(e => e.EstadoSolicitudId).HasName("PK__EstadoSo__04D23718216DD362");
+            entity.HasKey(e => e.EstadoSolicitudId).HasName("PK__EstadoSo__04D23718BAD6A528");
 
             entity.ToTable("EstadoSolicitud");
 
@@ -131,18 +126,49 @@ public partial class AppDbContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<EventoEmpleado>(entity =>
+        {
+            entity.HasKey(e => e.EventoEmpleadoId).HasName("PK__EventoEm__0A06DD3425AACB06");
+
+            entity.ToTable("EventoEmpleado");
+
+            entity.Property(e => e.FechaRegistro).HasDefaultValueSql("(sysdatetime())", "DF__EventoEmp__Fecha__6383C8BA");
+            entity.Property(e => e.FechaSolicitud).HasDefaultValueSql("(sysdatetime())", "DF__EventoEmp__Fecha__628FA481");
+            entity.Property(e => e.Observacion)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.SoporteUrl)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.AutorizadoPorEmpleado).WithMany(p => p.EventoEmpleadoAutorizadoPorEmpleados)
+                .HasForeignKey(d => d.AutorizadoPorEmpleadoId)
+                .HasConstraintName("FK_EventoEmpleado_Autoriza");
+
+            entity.HasOne(d => d.Empleado).WithMany(p => p.EventoEmpleadoEmpleados)
+                .HasForeignKey(d => d.EmpleadoId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_EventoEmpleado_Empleado");
+
+            entity.HasOne(d => d.EstadoSolicitud).WithMany(p => p.EventoEmpleados)
+                .HasForeignKey(d => d.EstadoSolicitudId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_EventoEmpleado_Estado");
+
+            entity.HasOne(d => d.TipoEventoEmpleado).WithMany(p => p.EventoEmpleados)
+                .HasForeignKey(d => d.TipoEventoEmpleadoId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_EventoEmpleado_Tipo");
+        });
+
         modelBuilder.Entity<HoraExtra>(entity =>
         {
-            entity.HasKey(e => e.HoraExtraId).HasName("PK__HoraExtr__BEE2480F2B1C5602");
+            entity.HasKey(e => e.HoraExtraId).HasName("PK__HoraExtr__BEE2480F0D57EB24");
 
             entity.ToTable("HoraExtra");
 
-            entity.HasIndex(e => e.EmpleadoId, "IX_HoraExtra_Empleado");
-
-            entity.HasIndex(e => e.Fecha, "IX_HoraExtra_Fecha");
-
             entity.Property(e => e.CantidadHoras).HasColumnType("decimal(5, 2)");
-            entity.Property(e => e.FechaRegistro).HasDefaultValueSql("(sysdatetime())", "DF__HoraExtra__Fecha__06CD04F7");
+            entity.Property(e => e.FechaRegistro).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.Justificacion)
                 .HasMaxLength(500)
                 .IsUnicode(false);
@@ -165,50 +191,27 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<HorarioLaboral>(entity =>
         {
-            entity.HasKey(e => e.HorarioLaboralId).HasName("PK__HorarioL__AAA9690175D25052");
+            entity.HasKey(e => e.HorarioLaboralId).HasName("PK__HorarioL__AAA969010DA219E0");
 
             entity.ToTable("HorarioLaboral");
 
-            entity.Property(e => e.Activo).HasDefaultValue(true);
+            entity.Property(e => e.Activo).HasDefaultValue(true, "DF__HorarioLa__Activ__6D0D32F4");
+            entity.Property(e => e.FechaInicio).HasDefaultValueSql("(getdate())", "DF__HorarioLa__Fecha__6C190EBB");
 
-            entity.HasOne(d => d.Empleado).WithMany(p => p.HorarioLaborals)
+            entity.HasOne(d => d.Empleado).WithMany(p => p.HorarioLaboralEmpleados)
                 .HasForeignKey(d => d.EmpleadoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Horario_Empleado");
-        });
 
-        modelBuilder.Entity<Permiso>(entity =>
-        {
-            entity.HasKey(e => e.PermisoId).HasName("PK__Permiso__96E0C7232E37B733");
-
-            entity.ToTable("Permiso");
-
-            entity.HasIndex(e => e.EmpleadoId, "IX_Permiso_Empleado");
-
-            entity.Property(e => e.FechaSolicitud).HasDefaultValueSql("(sysdatetime())", "DF__Permiso__FechaSo__01142BA1");
-            entity.Property(e => e.Observacion)
-                .HasMaxLength(500)
-                .IsUnicode(false);
-
-            entity.HasOne(d => d.Empleado).WithMany(p => p.Permisos)
-                .HasForeignKey(d => d.EmpleadoId)
+            entity.HasOne(d => d.ProgramadoPorEmpleado).WithMany(p => p.HorarioLaboralProgramadoPorEmpleados)
+                .HasForeignKey(d => d.ProgramadoPorEmpleadoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Permiso_Empleado");
-
-            entity.HasOne(d => d.EstadoSolicitud).WithMany(p => p.Permisos)
-                .HasForeignKey(d => d.EstadoSolicitudId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Permiso_Estado");
-
-            entity.HasOne(d => d.TipoPermiso).WithMany(p => p.Permisos)
-                .HasForeignKey(d => d.TipoPermisoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Permiso_Tipo");
+                .HasConstraintName("FK_Horario_ProgramadoPor");
         });
 
         modelBuilder.Entity<Sede>(entity =>
         {
-            entity.HasKey(e => e.SedeId).HasName("PK__Sede__FD76DFDB3219B271");
+            entity.HasKey(e => e.SedeId).HasName("PK__Sede__FD76DFDB43756ABC");
 
             entity.ToTable("Sede");
 
@@ -229,7 +232,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<TipoContrato>(entity =>
         {
-            entity.HasKey(e => e.TipoContratoId).HasName("PK__TipoCont__3E0E578736770E92");
+            entity.HasKey(e => e.TipoContratoId).HasName("PK__TipoCont__3E0E57876A614315");
 
             entity.ToTable("TipoContrato");
 
@@ -239,23 +242,11 @@ public partial class AppDbContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<TipoHoraExtra>(entity =>
+        modelBuilder.Entity<TipoEventoEmpleado>(entity =>
         {
-            entity.HasKey(e => e.TipoHoraExtraId).HasName("PK__TipoHora__A2DCE4100E8FBCB2");
+            entity.HasKey(e => e.TipoEventoEmpleadoId).HasName("PK__TipoEven__760C5A450E747ACE");
 
-            entity.ToTable("TipoHoraExtra");
-
-            entity.Property(e => e.Activo).HasDefaultValue(true);
-            entity.Property(e => e.Nombre)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<TipoPermiso>(entity =>
-        {
-            entity.HasKey(e => e.TipoPermisoId).HasName("PK__TipoPerm__6A7B92D2B4A6698F");
-
-            entity.ToTable("TipoPermiso");
+            entity.ToTable("TipoEventoEmpleado");
 
             entity.Property(e => e.Activo).HasDefaultValue(true);
             entity.Property(e => e.Nombre)
@@ -263,26 +254,16 @@ public partial class AppDbContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Vacacione>(entity =>
+        modelBuilder.Entity<TipoHoraExtra>(entity =>
         {
-            entity.HasKey(e => e.VacacionesId).HasName("PK__Vacacion__DC314980BC203B4B");
+            entity.HasKey(e => e.TipoHoraExtraId).HasName("PK__TipoHora__A2DCE410A8EAC453");
 
-            entity.HasIndex(e => e.EmpleadoId, "IX_Vacaciones_Empleado");
+            entity.ToTable("TipoHoraExtra");
 
-            entity.Property(e => e.FechaRegistro).HasDefaultValueSql("(sysdatetime())", "DF__Vacacione__Fecha__7C4F7684");
-            entity.Property(e => e.Observacion)
-                .HasMaxLength(500)
+            entity.Property(e => e.Activo).HasDefaultValue(true);
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(50)
                 .IsUnicode(false);
-
-            entity.HasOne(d => d.Empleado).WithMany(p => p.Vacaciones)
-                .HasForeignKey(d => d.EmpleadoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Vacaciones_Empleado");
-
-            entity.HasOne(d => d.EstadoSolicitud).WithMany(p => p.Vacaciones)
-                .HasForeignKey(d => d.EstadoSolicitudId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Vacaciones_Estado");
         });
 
         OnModelCreatingPartial(modelBuilder);

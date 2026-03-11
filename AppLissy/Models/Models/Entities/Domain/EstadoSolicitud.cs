@@ -9,9 +9,7 @@ public partial class EstadoSolicitud
 
     public string Nombre { get; set; } = null!;
 
+    public virtual ICollection<EventoEmpleado> EventoEmpleados { get; set; } = new List<EventoEmpleado>();
+
     public virtual ICollection<HoraExtra> HoraExtras { get; set; } = new List<HoraExtra>();
-
-    public virtual ICollection<Permiso> Permisos { get; set; } = new List<Permiso>();
-
-    public virtual ICollection<Vacacione> Vacaciones { get; set; } = new List<Vacacione>();
 }

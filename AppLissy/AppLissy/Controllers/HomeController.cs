@@ -18,8 +18,8 @@ namespace AppLissy.Controllers
         public IActionResult Index()
         {
             var empleados = _empBus.EmpleadoResponseGetAll();
-
-            return View();
+           
+            return View(empleados);
         }
 
         public IActionResult Privacy()

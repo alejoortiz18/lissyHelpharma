@@ -6,6 +6,7 @@ namespace Models.Dto
 {
     public class EmpleadoDto
     {
+        public int Id { get; set; }
         public string? TipoIdentificacion { get; set; }
         public string? NumeroIdentificacion { get; set; }
         public string? Nombres { get; set; }

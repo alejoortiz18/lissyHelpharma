@@ -18,24 +18,25 @@ namespace Data.Repository.Empleado
             try
             {
                 var sql = @"
-            SELECT E.TipoIdentificacion,
-                   E.NumeroIdentificacion,
-                   E.Nombres,
-                   E.Apellidos,
-                   E.Correo,
-                   E.FechaIngreso,
-                   E.SuperNum,
-                   E.FechaRetiro,
-                   E.FechaNacimiento,
-                   E.Activo,
-                   C.Nombre AS Cargo,
-                   S.Nombre AS Sede,
-                   S.Ciudad,
-                   TC.Nombre AS TipoContrato
-            FROM dbo.Empleado E
-            INNER JOIN dbo.Cargo C ON E.CargoId = C.CargoId
-            INNER JOIN dbo.Sede S ON E.SedeId = S.SedeId
-            INNER JOIN dbo.TipoContrato TC ON E.TipoContratoId = TC.TipoContratoId";
+                SELECT E.EmpleadoId AS Id,
+                       E.TipoIdentificacion,
+                       E.NumeroIdentificacion,
+                       E.Nombres,
+                       E.Apellidos,
+                       E.Correo,
+                       E.FechaIngreso,
+                       E.SuperNum,
+                       E.FechaRetiro,
+                       E.FechaNacimiento,
+                       E.Activo,
+                       C.Nombre AS Cargo,
+                       S.Nombre AS Sede,
+                       S.Ciudad,
+                       TC.Nombre AS TipoContrato
+                FROM dbo.Empleado E
+                INNER JOIN dbo.Cargo C ON E.CargoId = C.CargoId
+                INNER JOIN dbo.Sede S ON E.SedeId = S.SedeId
+                INNER JOIN dbo.TipoContrato TC ON E.TipoContratoId = TC.TipoContratoId";
 
                 var response = _context.EmpleadoDto
                         .FromSqlRaw(sql)
@@ -50,6 +51,22 @@ namespace Data.Repository.Empleado
             }
         }
 
+        public List<Models.Entities.Domain.Empleado> EmpleadoGetAll()
+        {
+            try
+            {
+                var response = _context.Empleados
+                        .Include(e => e.Cargo)
+                        .Include(e => e.Sede)
+                        .Include(e => e.TipoContrato)
+                        .AsNoTracking()
+                        .ToList();
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al consultar empleados: " + ex.Message);
+            }
 
-    }
+        }
 }

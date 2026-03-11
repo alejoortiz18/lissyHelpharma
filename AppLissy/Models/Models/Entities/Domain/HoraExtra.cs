@@ -9,9 +9,9 @@ public partial class HoraExtra
 
     public int EmpleadoId { get; set; }
 
-    public int EstadoSolicitudId { get; set; }
-
     public int TipoHoraExtraId { get; set; }
+
+    public int EstadoSolicitudId { get; set; }
 
     public DateOnly Fecha { get; set; }
 
