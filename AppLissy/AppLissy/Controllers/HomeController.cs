@@ -24,9 +24,12 @@ namespace AppLissy.Controllers
             return View(empleados);
         }
 
-        public IActionResult Privacy()
+
+        public IActionResult Detalle(int id)
         {
-            return View();
+            var empleado = _empBus.EmpleadoGetById(id);
+
+            return View(empleado);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

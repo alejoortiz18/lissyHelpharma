@@ -1,0 +1,143 @@
+﻿@using Models.Entities.Domain
+@model Empleado
+
+@{
+    var isJefe = Model.JefeId ==null?true:false;
+}
+
+<div class="main-panel">
+    <div class="content-wrapper">
+
+        @if (!isJefe)
+        {
+            <div class="row ">
+                <div class="col-12 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Jefe a Cargo</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th> Nombre </th>
+                                            <th> Apellido </th>
+                                            <th> Correo </th>
+                                            <th> Disponible </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td> @Model.Jefe.Nombres  </td>
+                                            <td> @Model.Jefe.Apellidos </td>
+                                            <td> @Model.Jefe.Correo </td>
+                                            <td> 
+                                                @if (@Model.Jefe.EventoEmpleadoEmpleados.FirstOrDefault().TipoEventoEmpleadoId == 1)
+                                                {
+                                                    <div class="badge badge-outline-success">Disponible</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="badge badge-outline-danger">No Disponible</div>
+                                                }
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+        <div class="row ">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Datos del empleado</h4>
+                    </div>
+                        <table class="table table-bordered">
+                            @if(Model !=null){
+
+                            }
+                            <tr>
+                                <th>Nombre</th>
+                                <td>@Model.Nombres @Model.Apellidos</td>
+                            </tr>
+
+                            <tr>
+                                <th>Documento</th>
+                                <td>@Model.NumeroIdentificacion</td>
+                            </tr>
+
+                            <tr>
+                                <th>Cargo</th>
+                                <td>@Model.Cargo?.Nombre</td>
+                            </tr>
+
+                            <tr>
+                                <th>Correo</th>
+                                <td>@Model.Correo</td>
+                            </tr>
+
+                        </table>
+                </div>
+            </div>
+        </div>
+
+        @if (isJefe)
+        {
+            <div class="row ">
+                <div class="col-12 grid-margin">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">A Cargo</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th> Nombre </th>
+                                            <th> Apellido </th>
+                                            <th> Correo </th>
+                                            <th> Disponible </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in @Model.InverseJefe)
+                                        {
+                                            
+                                            <tr>
+                                                <td> @item.Nombres  </td>
+                                                <td> @item.Apellidos </td>
+                                                <td> @item.Correo </td>
+                                                <td>
+                                                    @if (item.EventoEmpleadoEmpleados.FirstOrDefault().TipoEventoEmpleadoId == 1)
+                                                    {
+                                                        <div class="badge badge-outline-success">Disponible</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="badge badge-outline-danger">No Disponible</div>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </div>
+</div>
+
+
+
+

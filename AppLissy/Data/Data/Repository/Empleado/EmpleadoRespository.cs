@@ -103,6 +103,29 @@ namespace Data.Repository.Empleado
             }
         }
 
+        public model.Empleado EmpleadoGetById(int id)
+        {
+            try
+            {
+                var empleado = _context.Empleados
+                    .Include(x => x.Cargo)
+                    .Include(x => x.Jefe)
+                        .ThenInclude(x => x.EventoEmpleadoEmpleados)
+                    .Include(x => x.InverseJefe)
+                        .ThenInclude(x => x.Cargo)
+                    .Include(x => x.InverseJefe)
+                        .ThenInclude(x => x.EventoEmpleadoEmpleados)
+                    .Include(x => x.EventoEmpleadoEmpleados)
+                    .AsNoTracking()
+                    .FirstOrDefault(x => x.EmpleadoId == id);
+
+                return empleado;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al consultar empleado: " + ex.Message);
+            }
+        }
 
     }
 }
