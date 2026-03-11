@@ -1,12 +1,9 @@
-﻿using Models.Dto;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Models.Entities.Domain;
 
 namespace Business.Interfaces
 {
     public interface IEmpleadoBusiness
     {
-        List<EmpleadoDto> EmpleadoResponseGetAll();
+        List<Empleado> EmpleadoResponseGetAll();
     }
 }

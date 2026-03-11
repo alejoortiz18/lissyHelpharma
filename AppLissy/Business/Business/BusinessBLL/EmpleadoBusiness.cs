@@ -1,6 +1,7 @@
 ﻿using Business.Interfaces;
 using Data.Interfaces;
 using Models.Dto;
+using Models.Entities.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Business.BusinessBLL
         }
 
 
-        public List<EmpleadoDto> EmpleadoResponseGetAll()
+        public List<Empleado> EmpleadoResponseGetAll()
         {
             try
             {

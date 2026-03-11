@@ -1,5 +1,6 @@
 ﻿@using Models.Dto
-@model List<EmpleadoDto>;
+@using Models.Entities.Domain
+@model List<Empleado>;
 
 @{
     ViewData["Title"] = "Home Page";
@@ -12,130 +13,143 @@
         <div class="row">
             <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-9">
-                                <div class="d-flex align-items-center align-self-start">
-                                    <h3 class="mb-0">$12.34</h3>
-                                    <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="icon icon-box-success ">
-                                    <span class="mdi mdi-arrow-top-right icon-item"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <h6 class="text-muted font-weight-normal">Potential growth</h6>
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+
+                        <h3 class="mb-1">@Model.Where(x => x.CargoId == 1).Count()</h3>
+
+                        <h6 class="text-muted font-weight-normal">
+                            Jefes
+                        </h6>
+
                     </div>
                 </div>
             </div>
             <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-9">
-                                <div class="d-flex align-items-center align-self-start">
-                                    <h3 class="mb-0">$17.34</h3>
-                                    <p class="text-success ml-2 mb-0 font-weight-medium">+11%</p>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="icon icon-box-success">
-                                    <span class="mdi mdi-arrow-top-right icon-item"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <h6 class="text-muted font-weight-normal">Revenue current</h6>
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+
+                        <h3 class="mb-1">@Model.Count()</h3>
+
+                        <h6 class="text-muted font-weight-normal">
+                            Total empleados
+                        </h6>
+
                     </div>
                 </div>
             </div>
             <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-9">
-                                <div class="d-flex align-items-center align-self-start">
-                                    <h3 class="mb-0">$12.34</h3>
-                                    <p class="text-danger ml-2 mb-0 font-weight-medium">-2.4%</p>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="icon icon-box-danger">
-                                    <span class="mdi mdi-arrow-bottom-left icon-item"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <h6 class="text-muted font-weight-normal">Daily Income</h6>
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+
+                        <h3 class="mb-1">
+                            @(Model.SelectMany(x => x.EventoEmpleadoEmpleados)
+                                                        .Count(y => y.EstadoSolicitudId != 1 && 
+                                                                y.EstadoSolicitudId != 7 &&
+                                                        y.EstadoSolicitudId != 8))
+                        </h3>
+
+                        <h6 class="text-muted font-weight-normal">
+                            Personal Con novedades
+                        </h6>
+
                     </div>
                 </div>
             </div>
             <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-9">
-                                <div class="d-flex align-items-center align-self-start">
-                                    <h3 class="mb-0">$31.53</h3>
-                                    <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="icon icon-box-success ">
-                                    <span class="mdi mdi-arrow-top-right icon-item"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <h6 class="text-muted font-weight-normal">Expense current</h6>
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+
+                        <h3 class="mb-1">
+                            @(Model.SelectMany(x => x.EventoEmpleadoEmpleados)
+                                                        .Count(y => y.EstadoSolicitudId == 4 &&
+                                                        y.EstadoSolicitudId == 7 &&
+                                                        y.EstadoSolicitudId == 8))
+                        </h3>
+
+                        <h6 class="text-muted font-weight-normal">
+                            Personal con permisos
+                        </h6>
+
                     </div>
                 </div>
             </div>
         </div>
-      
+
+        <div class="row ">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+     
        
         <div class="row ">
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Empleados</h4>
+                        <div class="row mb-3">
+
+                            <div class="col-md-4">
+                                <input type="text" id="filtroNombre" class="form-control form-control-sm" placeholder="Buscar por nombre">
+                            </div>
+
+                            <div class="col-md-4">
+                                <input type="text" id="filtroDocumento" class="form-control form-control-sm" placeholder="Buscar por documento">
+                            </div>
+
+                            <div class="col-md-4">
+                                <input type="text" id="filtroCargo" class="form-control form-control-sm" placeholder="Buscar por cargo">
+                            </div>
+
+                        </div>
+
                         <div class="table-responsive">
-                            <table class="table">
-                                <thead>
+                            <table class="table table-sm table-striped align-middle w-100" id="tablaEmpleados" style="table-layout:fixed;">
+
+                                <thead class="table-dark">
                                     <tr>
-                                        <th> ID </th>
-                                        <th> Identificación </th>
-                                        <th> Nombre </th>
-                                        <th> Apellido </th>
-                                        <th> Correo </th>
-                                        <th> SuperNum </th>
-                                        <th> Fecha Nacimiento </th>
-                                        <th> Cargo </th>
-                                        <th>  </th>
+                                        <th style="width:5%">ID</th>
+                                        <th style="width:12%">Documento</th>
+                                        <th style="width:15%">Nombre</th>
+                                        <th style="width:15%">Apellido</th>
+                                        <th style="width:18%">Correo</th>
+                                        <th style="width:12%">Nacimiento</th>
+                                        <th style="width:15%">Cargo</th>
+                                        <th style="width:8%">Acción</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @if(Model is null)
-                                    {
 
-                                    }else
+                                <tbody>
+
+                                    @if (Model != null)
                                     {
                                         foreach (var item in Model)
                                         {
                                             <tr>
-                                                <td> @item.Id </td>
-                                                <td> @item.NumeroIdentificacion </td>
-                                                <td> @item.Nombres </td>
-                                                <td> @item.Apellidos </td>
-                                                <td> @item.Correo </td>
-                                                <td> @item.SuperNum </td>
-                                                <td> @item.FechaNacimiento.ToShortDateString() </td>
-                                                <td> @item.Cargo </td>
-                                                <td>  </td>
+                                                <td>@item.EmpleadoId</td>
+                                                <td class="text-nowrap">@item.NumeroIdentificacion</td>
+                                                <td>@item.Nombres</td>
+                                                <td>@item.Apellidos</td>
+                                                <td class="text-truncate">@item.Correo</td>
+
+                                                <td class="text-nowrap">
+                                                    @item.FechaNacimiento.ToString("d MMM yyyy", new System.Globalization.CultureInfo("es-ES"))
+                                                </td>
+
+                                                <td class="text-truncate">@item.Cargo.Nombre</td>
+
+                                                <td>
+                                                    <button class="btn btn-success btn-sm">Ver</button>
+                                                </td>
                                             </tr>
                                         }
                                     }
-                                  
+
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
@@ -148,3 +162,45 @@
   
 </div>
 <!-- main-panel ends -->
+
+
+<script>
+
+    document.querySelectorAll("#filtroNombre, #filtroDocumento, #filtroCargo")
+    .forEach(input => {
+
+        input.addEventListener("keyup", filtrarTabla);
+
+    });
+
+    function filtrarTabla(){
+
+        let nombre = document.getElementById("filtroNombre").value.toLowerCase();
+        let documento = document.getElementById("filtroDocumento").value.toLowerCase();
+        let cargo = document.getElementById("filtroCargo").value.toLowerCase();
+
+        let filas = document.querySelectorAll("#tablaEmpleados tbody tr");
+
+        filas.forEach(fila => {
+
+            let tdDocumento = fila.children[1].innerText.toLowerCase();
+            let tdNombre = fila.children[2].innerText.toLowerCase();
+            let tdApellido = fila.children[3].innerText.toLowerCase();
+            let tdCargo = fila.children[7].innerText.toLowerCase();
+
+            let coincideNombre = (tdNombre + " " + tdApellido).includes(nombre);
+            let coincideDocumento = tdDocumento.includes(documento);
+            let coincideCargo = tdCargo.includes(cargo);
+
+            if(coincideNombre && coincideDocumento && coincideCargo){
+                fila.style.display = "";
+            }
+            else{
+                fila.style.display = "none";
+            }
+
+        });
+
+    }
+
+</script>
