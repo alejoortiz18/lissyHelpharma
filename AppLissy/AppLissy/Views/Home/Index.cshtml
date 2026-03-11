@@ -1,6 +1,7 @@
 ﻿@using Models.Dto
 @using Models.Entities.Domain
-@model List<Empleado>;
+@using Models.Models
+@model Paginacion<Empleado>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -11,11 +12,14 @@
     <div class="content-wrapper">
 
         <div class="row">
+
             <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
 
-                        <h3 class="mb-1">@Model.Where(x => x.CargoId == 1).Count()</h3>
+                        <h3 class="mb-1">
+                            @(Model.Datos.Count(x => x.CargoId == 1))
+                        </h3>
 
                         <h6 class="text-muted font-weight-normal">
                             Jefes
@@ -24,11 +28,15 @@
                     </div>
                 </div>
             </div>
+
+
             <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
 
-                        <h3 class="mb-1">@Model.Count()</h3>
+                        <h3 class="mb-1">
+                            @Model.TotalRegistros
+                        </h3>
 
                         <h6 class="text-muted font-weight-normal">
                             Total empleados
@@ -37,33 +45,39 @@
                     </div>
                 </div>
             </div>
+
+
             <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
 
                         <h3 class="mb-1">
-                            @(Model.SelectMany(x => x.EventoEmpleadoEmpleados)
-                                                        .Count(y => y.EstadoSolicitudId != 1 && 
-                                                                y.EstadoSolicitudId != 7 &&
-                                                        y.EstadoSolicitudId != 8))
+                            @(Model.Datos.Count(x =>
+                                                        x.EventoEmpleadoEmpleados.Any(y =>
+                                                        y.EstadoSolicitudId != 1 &&
+                                                        y.EstadoSolicitudId != 7 &&
+                                                        y.EstadoSolicitudId != 8)))
                         </h3>
 
                         <h6 class="text-muted font-weight-normal">
-                            Personal Con novedades
+                            Personal con novedades
                         </h6>
 
                     </div>
                 </div>
             </div>
+
+
             <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
 
                         <h3 class="mb-1">
-                            @(Model.SelectMany(x => x.EventoEmpleadoEmpleados)
-                                                        .Count(y => y.EstadoSolicitudId == 4 &&
-                                                        y.EstadoSolicitudId == 7 &&
-                                                        y.EstadoSolicitudId == 8))
+                            @(Model.Datos.Count(x =>
+                                                        x.EventoEmpleadoEmpleados.Any(y =>
+                                                        y.EstadoSolicitudId == 4 ||
+                                                        y.EstadoSolicitudId == 7 ||
+                                                        y.EstadoSolicitudId == 8)))
                         </h3>
 
                         <h6 class="text-muted font-weight-normal">
@@ -73,6 +87,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="row ">
@@ -107,6 +122,7 @@
                         </div>
 
                         <div class="table-responsive">
+
                             <table class="table table-sm table-striped align-middle w-100" id="tablaEmpleados" style="table-layout:fixed;">
 
                                 <thead class="table-dark">
@@ -124,22 +140,32 @@
 
                                 <tbody>
 
-                                    @if (Model != null)
+                                    @if (Model != null && Model.Datos != null)
                                     {
-                                        foreach (var item in Model)
+                                        foreach (var item in Model.Datos)
                                         {
                                             <tr>
                                                 <td>@item.EmpleadoId</td>
-                                                <td class="text-nowrap">@item.NumeroIdentificacion</td>
+
+                                                <td class="text-nowrap">
+                                                    @item.NumeroIdentificacion
+                                                </td>
+
                                                 <td>@item.Nombres</td>
+
                                                 <td>@item.Apellidos</td>
-                                                <td class="text-truncate">@item.Correo</td>
+
+                                                <td class="text-truncate">
+                                                    @item.Correo
+                                                </td>
 
                                                 <td class="text-nowrap">
                                                     @item.FechaNacimiento.ToString("d MMM yyyy", new System.Globalization.CultureInfo("es-ES"))
                                                 </td>
 
-                                                <td class="text-truncate">@item.Cargo.Nombre</td>
+                                                <td class="text-truncate">
+                                                    @item.Cargo.Nombre
+                                                </td>
 
                                                 <td>
                                                     <button class="btn btn-success btn-sm">Ver</button>
@@ -151,7 +177,30 @@
                                 </tbody>
 
                             </table>
+
                         </div>
+
+
+                        <nav class="mt-3">
+                            <ul class="pagination justify-content-center">
+
+                                @for (int i = 1; i <= Model.TotalPaginas; i++)
+                                {
+                                    <li class="page-item @(i == Model.PaginaActual ? "active" : "")">
+
+                                        <a class="page-link"
+                                           asp-action="Index"
+                                           asp-route-pagina="@i">
+
+                                            @i
+
+                                        </a>
+
+                                    </li>
+                                }
+
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>

@@ -1,9 +1,11 @@
 ﻿using Models.Entities.Domain;
+using Models.Models;
 
 namespace Business.Interfaces
 {
     public interface IEmpleadoBusiness
     {
         List<Empleado> EmpleadoResponseGetAll();
+        Paginacion<Empleado> EmpleadoResponseGetAll(int pagina, int cantidad);
     }
 }

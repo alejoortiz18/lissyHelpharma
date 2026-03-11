@@ -15,10 +15,12 @@ namespace AppLissy.Controllers
         }
 
 
-        public IActionResult Index()
+        public IActionResult Index(int pagina = 1)
         {
-            var empleados = _empBus.EmpleadoResponseGetAll();
-           
+            int registrosPorPagina = 10;
+
+            var empleados = _empBus.EmpleadoResponseGetAll(pagina, registrosPorPagina);
+
             return View(empleados);
         }
 
