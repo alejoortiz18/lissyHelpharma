@@ -127,5 +127,24 @@ namespace Data.Repository.Empleado
             }
         }
 
+        public model.Empleado GetEmpleadoCompleto(int id) { 
+        
+        var emp = _context.Empleados.Where(e => e.EmpleadoId == id)
+            .Include(e => e.Cargo)
+            .Include(e => e.Sede)
+            .Include(e => e.TipoContrato)
+            .Include(e => e.Jefe)
+                .ThenInclude(j => j.Cargo)
+            .Include(e => e.InverseJefe)
+                .ThenInclude(ij => ij.Cargo)
+            .Include(e => e.EventoEmpleadoEmpleados)
+                .ThenInclude(eee => eee.TipoEventoEmpleado)
+            .Include(e => e.HorarioLaboralEmpleados)            
+            .AsNoTracking()
+            .FirstOrDefault();
+
+            return emp;
+
+        }
     }
 }

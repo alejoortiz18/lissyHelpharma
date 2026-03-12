@@ -1,0 +1,125 @@
+﻿@using Models.Entities.Domain
+@model Empleado
+
+<div class="main-panel">
+    <div class="content-wrapper">
+
+      
+        
+        <div class="row ">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Datos del empleado</h4>
+                    </div>
+                    <table class="table table-bordered">
+                        @if (Model != null)
+                        {
+
+                        }
+                        <tr>
+                            <th>Nombre</th>
+                            <td>@Model.Nombres @Model.Apellidos</td>
+                        </tr>
+
+                        <tr>
+                            <th>Documento</th>
+                            <td>@Model.NumeroIdentificacion</td>
+                        </tr>
+
+                        <tr>
+                            <th>Cargo</th>
+                            <td>@Model.Cargo?.Nombre</td>
+                        </tr>
+
+                        <tr>
+                            <th>Correo</th>
+                            <td>@Model.Correo</td>
+                        </tr>
+                        <tr>
+                            <th>Contrato con</th>
+                            <td>@Model.TipoContrato.Nombre</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row ">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Sede</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th> Nombre </th>
+                                        <th> Ciudad </th>
+                                        <th> Dirección </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>@Model.Sede.Nombre</td>
+                                        <td>@Model.Sede.Ciudad</td>
+                                        <td>@Model.Sede.Direccion</td>
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        @if (true)
+        {
+            
+        }
+
+        <div class="row ">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Eventos del empleado</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th> Tipo evento </th>
+                                        <th> Quien Aprobó </th>
+                                        <th> Fecha inicio </th>
+                                        <th> Fecha Fin </th>
+                                        <th> Dirección </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>@Model.Sede.Nombre</td>
+                                        <td>@Model.Sede.Ciudad</td>
+                                        <td>@Model.Sede.Direccion</td>
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+
+    </div>
+</div>
+
+
+
+

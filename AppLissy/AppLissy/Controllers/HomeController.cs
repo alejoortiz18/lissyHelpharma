@@ -32,6 +32,8 @@ namespace AppLissy.Controllers
             return View(empleado);
         }
 
+        
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

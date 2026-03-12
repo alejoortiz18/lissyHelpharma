@@ -9,5 +9,6 @@ namespace Business.Interfaces
         Paginacion<Empleado> EmpleadoResponseGetAll(int pagina, int cantidad);
 
         Empleado EmpleadoGetById(int id);
+        Empleado GetEmpleadoCompleto(int id);
     }
 }

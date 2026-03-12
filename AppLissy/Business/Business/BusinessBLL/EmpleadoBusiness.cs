@@ -54,5 +54,17 @@ namespace Business.BusinessBLL
                 throw new Exception("Error al obtener empleado: " + ex.Message);
             }
         }
+
+        public Empleado GetEmpleadoCompleto(int id)
+        {
+            try
+            {
+                return _empleadoRespository.GetEmpleadoCompleto(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener empleado completo: " + ex.Message);
+            }
+        }
     }
 }

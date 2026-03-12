@@ -30,6 +30,7 @@
                                             <td> @Model.Jefe.Nombres  </td>
                                             <td> @Model.Jefe.Apellidos </td>
                                             <td> @Model.Jefe.Correo </td>
+                                                
                                             <td> 
                                                 @if (@Model.Jefe.EventoEmpleadoEmpleados.FirstOrDefault().TipoEventoEmpleadoId == 1)
                                                 {
@@ -39,6 +40,9 @@
                                                 {
                                                     <div class="badge badge-outline-danger">No Disponible</div>
                                                 }
+                                               
+                                                <div class="badge badge-outline-success">Ver</div>
+                                               
                                             </td>
                                         </tr>
 
@@ -105,26 +109,33 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var item in @Model.InverseJefe)
+                                        @foreach (var item in Model.InverseJefe)
                                         {
-                                            
                                             <tr>
-                                                <td> @item.Nombres  </td>
-                                                <td> @item.Apellidos </td>
-                                                <td> @item.Correo </td>
+                                                <td>@item.Nombres</td>
+                                                <td>@item.Apellidos</td>
+                                                <td>@item.Correo</td>
                                                 <td>
-                                                    @if (item.EventoEmpleadoEmpleados.FirstOrDefault().TipoEventoEmpleadoId == 1)
+
+                                                    @if (item.EventoEmpleadoEmpleados.FirstOrDefault()?.TipoEventoEmpleadoId == 1)
                                                     {
-                                                        <div class="badge badge-outline-success">Disponible</div>
+                                                        <span class="badge badge-outline-success me-2">Disponible</span>
                                                     }
                                                     else
                                                     {
-                                                        <div class="badge badge-outline-danger">No Disponible</div>
+                                                        <span class="badge badge-outline-danger me-2">No Disponible</span>
                                                     }
+
+                                                    <a asp-controller="Usuario"
+                                                       asp-action="DetalleEmpleado"
+                                                       asp-route-id="@item.EmpleadoId"
+                                                       class="badge badge-outline-info">
+                                                        Ver
+                                                    </a>
+
                                                 </td>
                                             </tr>
                                         }
-
                                     </tbody>
                                 </table>
                             </div>
