@@ -15,6 +15,7 @@ namespace Business.Dependences
             #region [ Repository Data Access ]
 
             services.AddScoped<IEmpleadoBusiness, EmpleadoBusiness>();
+            services.AddScoped<IEventoBusiness, EventoBusiness>();
 
             //
             #endregion

@@ -138,8 +138,13 @@ namespace Data.Repository.Empleado
             .Include(e => e.InverseJefe)
                 .ThenInclude(ij => ij.Cargo)
             .Include(e => e.EventoEmpleadoEmpleados)
-                .ThenInclude(eee => eee.TipoEventoEmpleado)
-            .Include(e => e.HorarioLaboralEmpleados)            
+                .ThenInclude(z =>z.TipoEventoEmpleado)
+            .Include(e => e.EventoEmpleadoEmpleados)
+                .ThenInclude(q=>q.AutorizadoPorEmpleado)
+            .Include(e => e.HorarioLaboralEmpleados)  
+            .Include(e => e.HorarioLaboralProgramadoPorEmpleados)
+            .Include(e => e.HoraExtras)
+            .Include(e => e.TipoEventoEmpleado)
             .AsNoTracking()
             .FirstOrDefault();
 

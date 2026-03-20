@@ -13,6 +13,8 @@ public partial class Empleado
 
     public int TipoContratoId { get; set; }
 
+    public int? TipoEventoEmpleadoId { get; set; }
+
     public int? JefeId { get; set; }
 
     public string TipoIdentificacion { get; set; } = null!;
@@ -64,4 +66,6 @@ public partial class Empleado
     public virtual Sede Sede { get; set; } = null!;
 
     public virtual TipoContrato TipoContrato { get; set; } = null!;
+
+    public virtual TipoEventoEmpleado? TipoEventoEmpleado { get; set; }
 }

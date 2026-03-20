@@ -13,5 +13,7 @@ public partial class TipoEventoEmpleado
 
     public bool Activo { get; set; }
 
+    public virtual ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
+
     public virtual ICollection<EventoEmpleado> EventoEmpleados { get; set; } = new List<EventoEmpleado>();
 }

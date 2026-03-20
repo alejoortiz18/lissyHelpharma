@@ -104,7 +104,7 @@
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Empleados</h4>
+                        <h4 class="card-title" style="text-align:center">Empleados</h4>
                         <div class="row mb-3">
 
                             <div class="col-md-4">
@@ -142,7 +142,7 @@
 
                                     @if (Model != null && Model.Datos != null)
                                     {
-                                        foreach (var item in Model.Datos)
+                                        @foreach (var item in Model.Datos)
                                         {
                                             <tr>
                                                 <td>@item.EmpleadoId</td>
@@ -167,12 +167,60 @@
                                                     @item.Cargo.Nombre
                                                 </td>
 
-                                                <td>
-                                                    <a asp-action="Detalle"
-                                                       asp-route-id="@item.EmpleadoId"
-                                                       class="btn btn-success btn-sm">
-                                                        Ver
-                                                    </a>
+                                                <td class="text-center">
+
+                                                    <div class="dropdown position-static">
+
+                                                        <a href="#"
+                                                           class="text-white"
+                                                           id="dropdownMenuButton_@item.EmpleadoId"
+                                                           data-toggle="dropdown"
+                                                           aria-haspopup="true"
+                                                           aria-expanded="false"
+                                                           style="font-size:20px;">
+
+                                                            <i class="mdi mdi-dots-vertical"></i>
+
+                                                        </a>
+
+                                                        <div class="dropdown-menu dropdown-menu-right">
+
+                                                            <a class="dropdown-item"
+                                                               asp-action="Detalle"
+                                                               asp-route-id="@item.EmpleadoId"
+                                                               style="transition:0.2s;"
+                                                               onmouseover="this.style.backgroundColor='#007bff'; this.style.color='white';"
+                                                               onmouseout="this.style.backgroundColor=''; this.style.color='';">
+
+                                                                <i class="mdi mdi-eye"></i> Perfil
+                                                            </a>
+
+                                                            <a class="dropdown-item"
+                                                               asp-controller="EventoEmpleado"
+                                                               asp-action="Index"
+                                                               asp-route-id="@item.EmpleadoId"
+                                                               style="transition:0.2s;"
+                                                               onmouseover="this.style.backgroundColor='#007bff'; this.style.color='white';"
+                                                               onmouseout="this.style.backgroundColor=''; this.style.color='';">
+
+                                                                <i class="mdi mdi-calendar-alert"></i> Ver Eventos
+                                                            </a>
+
+                                                            <a class="dropdown-item"
+                                                               asp-controller="Eventos"
+                                                               asp-action="Index"
+                                                               asp-route-id="@item.EmpleadoId"
+                                                               style="transition:0.2s;"
+                                                               onmouseover="this.style.backgroundColor='#007bff'; this.style.color='white';"
+                                                               onmouseout="this.style.backgroundColor=''; this.style.color='';">
+
+                                                                <i class="mdi mdi-plus"></i> Crear Evento
+                                                            </a>
+
+                                                        </div>
+
+                                                    </div>
+
                                                 </td>
                                             </tr>
                                         }
@@ -239,7 +287,7 @@
             let tdDocumento = fila.children[1].innerText.toLowerCase();
             let tdNombre = fila.children[2].innerText.toLowerCase();
             let tdApellido = fila.children[3].innerText.toLowerCase();
-            let tdCargo = fila.children[7].innerText.toLowerCase();
+            let tdCargo = fila.children[6].innerText.toLowerCase();
 
             let coincideNombre = (tdNombre + " " + tdApellido).includes(nombre);
             let coincideDocumento = tdDocumento.includes(documento);

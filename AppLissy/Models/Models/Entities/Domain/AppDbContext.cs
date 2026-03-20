@@ -65,7 +65,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasIndex(e => e.NumeroIdentificacion, "UQ__Empleado__FCA68D91AD6476A3").IsUnique();
 
-            entity.Property(e => e.Activo).HasDefaultValue(true);
+            entity.Property(e => e.Activo).HasDefaultValue(true, "DF__Empleado__Activo__5535A963");
             entity.Property(e => e.Apellidos)
                 .HasMaxLength(150)
                 .IsUnicode(false);
@@ -75,7 +75,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Direccion)
                 .HasMaxLength(250)
                 .IsUnicode(false);
-            entity.Property(e => e.FechaCreacion).HasDefaultValueSql("(sysdatetime())");
+            entity.Property(e => e.FechaCreacion).HasDefaultValueSql("(sysdatetime())", "DF__Empleado__FechaC__5629CD9C");
             entity.Property(e => e.Genero)
                 .HasMaxLength(20)
                 .IsUnicode(false);
@@ -113,6 +113,10 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.TipoContratoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Empleado_TipoContrato");
+
+            entity.HasOne(d => d.TipoEventoEmpleado).WithMany(p => p.Empleados)
+                .HasForeignKey(d => d.TipoEventoEmpleadoId)
+                .HasConstraintName("FK_Empleado_TipoEventoEmpleado");
         });
 
         modelBuilder.Entity<EstadoSolicitud>(entity =>
