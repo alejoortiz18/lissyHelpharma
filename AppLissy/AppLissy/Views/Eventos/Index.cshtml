@@ -6,6 +6,7 @@
 @{
     ViewData["Title"] = "Home Page";
     var eventos = ViewBag.Eventos as List<TipoEventoEmpleado>;
+    var solicitudes = ViewBag.Solicitudes as List<EstadoSolicitud>;
 }
 
 <!-- partial -->
@@ -155,7 +156,10 @@
                             <select class="form-control form-control-lg" id="exampleFormControlSelect1">
                                 @foreach (var evento in eventos)
                                 {
-                                    <option>@evento.Nombre</option>
+                                    @if (evento.Nombre.ToUpper() !="NINGUNO")
+                                    {
+                                        <option>@evento.Nombre</option>
+                                    }
                                 }
                             </select>
                         </div>
@@ -173,6 +177,24 @@
                                     <label class="col-sm-3 col-form-label">Fecha Fin</label>
                                     <div class="col-sm-9">
                                         <input type="date" class="form-control fecha-custom" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Solicitudes</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control form-control-lg" id="exampleFormControlSelect1">
+                                            @foreach (var solicitud in solicitudes)
+                                            {
+                                                if (solicitud.Nombre.ToUpper() != "NINGUNO")
+                                                {
+                                                    <option>@solicitud.Nombre</option>
+                                                }
+                                            }
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -195,8 +217,11 @@
                             </div>
                         </div>
 
-                       
-
+                        <div class="card-body">
+                            <div class="template-demo">
+                                <button type="button" class="btn btn-outline-success btn-fw">Enviar</button>
+                            </div>
+                        </div>
                     </div>
                     
                 </div>

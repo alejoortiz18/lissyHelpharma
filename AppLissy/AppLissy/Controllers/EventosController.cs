@@ -9,10 +9,13 @@ namespace AppLissy.Controllers
        
         public readonly IEmpleadoBusiness _empBus;
         public readonly IEventoBusiness _eventBus;
-        public EventosController(IEmpleadoBusiness empB, IEventoBusiness eventBus)
+        public readonly ISolicitudesBusiness _solicBus;
+
+        public EventosController(IEmpleadoBusiness empB, IEventoBusiness eventBus, ISolicitudesBusiness solicBus)
         {
             _empBus = empB;
             _eventBus = eventBus;
+            _solicBus = solicBus;
         }
 
         // GET: EventosController
@@ -23,6 +26,7 @@ namespace AppLissy.Controllers
             var empleados = _eventBus.GetByEmpleadoId(id);
             var eventos = _eventBus.GetAll();
             ViewBag.Eventos = eventos;
+            ViewBag.Solicitudes = _solicBus.GetAll();
 
             return View(empleados);
         }

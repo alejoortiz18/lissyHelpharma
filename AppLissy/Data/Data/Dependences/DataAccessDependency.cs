@@ -1,6 +1,7 @@
 ﻿using Data.Interfaces;
 using Data.Repository.Empleado;
 using Data.Repository.Evento;
+using Data.Repository.Solicitudes;
 using Microsoft.Extensions.DependencyInjection;
 using Models.Entities.Domain;
 using System;
@@ -18,6 +19,7 @@ namespace Data.Dependences
 
             services.AddScoped<IEmpleadoRespository, EmpleadoRespository>();
             services.AddScoped<IEventoRepository, EventoRepository>();
+            services.AddScoped<ISolicitudesRepository, SolicitudesRepository>();
             //
             #endregion
 
