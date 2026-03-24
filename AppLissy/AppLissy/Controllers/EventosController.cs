@@ -1,6 +1,8 @@
 ﻿using Business.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models.Dto;
+using Models.Entities.Domain;
 
 namespace AppLissy.Controllers
 {
@@ -21,6 +23,8 @@ namespace AppLissy.Controllers
         // GET: EventosController
         public ActionResult Index(int id)
         {
+            if (id == 0)
+                return RedirectToAction("index","Home");
             int registrosPorPagina = 10;
 
             var empleados = _eventBus.GetByEmpleadoId(id);
@@ -31,73 +35,43 @@ namespace AppLissy.Controllers
             return View(empleados);
         }
 
-        // GET: EventosController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
-        // GET: EventosController/Create
-        public ActionResult Crear(int id)
-        {
-            return View();
-        }
+
 
         // POST: EventosController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(EventoDto model, IFormFile archivo)
         {
             try
             {
+                // Ejemplo: setear datos automáticos
+                model.FechaRegistro = DateTime.Now;
+                model.FechaSolicitud = DateTime.Now;
+
+                // Aquí guardas archivo si viene
+                if (archivo != null && archivo.Length > 0)
+                {
+                    var ruta = Path.Combine("wwwroot/soportes", archivo.FileName);
+
+                    using (var stream = new FileStream(ruta, FileMode.Create))
+                    {
+                        archivo.CopyTo(stream);
+                    }
+
+                    model.SoporteUrl = "/soportes/" + archivo.FileName;
+                }
+
+                // Guardar en BD aquí...
+
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex) 
             {
                 return View();
             }
         }
 
-        // GET: EventosController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
 
-        // POST: EventosController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: EventosController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: EventosController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }
