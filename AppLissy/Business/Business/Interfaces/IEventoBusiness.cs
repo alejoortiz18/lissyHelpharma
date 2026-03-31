@@ -1,4 +1,6 @@
-﻿using Models.Entities.Domain;
+﻿using Microsoft.AspNetCore.Http;
+using Models.Dto;
+using Models.Entities.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,5 +11,6 @@ namespace Business.Interfaces
     {
         Empleado GetByEmpleadoId(int id);
         List<TipoEventoEmpleado> GetAll();
+        bool Add(EventoEmpleado evento, byte[] archivoBytes);
     }
 }

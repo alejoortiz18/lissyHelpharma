@@ -1,5 +1,7 @@
 ﻿using Business.Interfaces;
 using Data.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Models.Dto;
 using Models.Entities.Domain;
 
 namespace Business.BusinessBLL
@@ -23,5 +25,18 @@ namespace Business.BusinessBLL
             return _event.GetAll();
         }
 
+        public bool Add(EventoEmpleado evento, byte[] archivoBytes)
+        {
+            try
+            {
+                bool result = _event.Add(evento);
+                //falta envio del correo con el archivo adjunto
+                return result;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

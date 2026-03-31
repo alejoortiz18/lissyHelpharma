@@ -1,4 +1,5 @@
 using AppLissy.DependencyContainer;
+using Business.Dependences;
 using Microsoft.EntityFrameworkCore;
 using Models.Entities.Domain;
 
@@ -11,6 +12,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("OctopusConnection")));
 
 builder.Services.DependencyInjection();
+builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfile).Assembly);
 
 var app = builder.Build();
 

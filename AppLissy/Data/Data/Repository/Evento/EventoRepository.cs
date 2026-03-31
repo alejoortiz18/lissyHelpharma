@@ -33,6 +33,20 @@ namespace Data.Repository.Evento
             return events;
         }
 
+        public bool Add(EventoEmpleado evento)
+        {
+            try
+            {
+                _context.EventoEmpleados.Add(evento);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
 
     }
 }

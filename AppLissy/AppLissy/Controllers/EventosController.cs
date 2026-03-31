@@ -1,4 +1,5 @@
-﻿using Business.Interfaces;
+﻿using AutoMapper;
+using Business.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.Dto;
@@ -12,12 +13,20 @@ namespace AppLissy.Controllers
         public readonly IEmpleadoBusiness _empBus;
         public readonly IEventoBusiness _eventBus;
         public readonly ISolicitudesBusiness _solicBus;
+        private readonly IWebHostEnvironment _webHost;
+        private readonly IMapper _mapper;
 
-        public EventosController(IEmpleadoBusiness empB, IEventoBusiness eventBus, ISolicitudesBusiness solicBus)
+        public EventosController(IEmpleadoBusiness empB,
+            IEventoBusiness eventBus, 
+            ISolicitudesBusiness solicBus,
+            IWebHostEnvironment env,
+            IMapper mapper)
         {
             _empBus = empB;
             _eventBus = eventBus;
             _solicBus = solicBus;
+            _webHost = env;
+            _mapper = mapper;
         }
 
         // GET: EventosController
@@ -39,39 +48,78 @@ namespace AppLissy.Controllers
 
 
         // POST: EventosController/Create
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create(EventoDto model, IFormFile archivo)
+        //{
+        //    try
+        //    {
+        //        model.FechaRegistro = DateTime.Now;
+        //        model.FechaSolicitud = DateTime.Now;
+
+        //        if (archivo != null && archivo.Length > 0)
+        //        {
+        //            var entidad = _mapper.Map<EventoEmpleado>(model);
+
+        //            // 🔥 Enviar a capa de negocio (YA COMO ENTITY)
+        //            _eventBus.Add(entidad, archivo);
+        //        }
+
+
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ModelState.AddModelError("", ex.Message);
+        //        return View(model);
+        //    }
+        //}
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(EventoDto model, IFormFile archivo)
+        public async Task<IActionResult> Create(EventoDto model, IFormFile archivo)
         {
             try
             {
-                // Ejemplo: setear datos automáticos
+                if (!ModelState.IsValid)
+                {
+                    CargarCombos();
+                    return View("Index", model);
+                }
+
                 model.FechaRegistro = DateTime.Now;
                 model.FechaSolicitud = DateTime.Now;
 
-                // Aquí guardas archivo si viene
+                byte[]? archivoBytes = null;
+
                 if (archivo != null && archivo.Length > 0)
                 {
-                    var ruta = Path.Combine("wwwroot/soportes", archivo.FileName);
-
-                    using (var stream = new FileStream(ruta, FileMode.Create))
-                    {
-                        archivo.CopyTo(stream);
-                    }
-
-                    model.SoporteUrl = "/soportes/" + archivo.FileName;
+                    using var ms = new MemoryStream();
+                    await archivo.CopyToAsync(ms);
+                    archivoBytes = ms.ToArray();
                 }
 
-                // Guardar en BD aquí...
+                var entidad = _mapper.Map<EventoEmpleado>(model);
+
+                bool resultAdd = _eventBus.Add(entidad, archivoBytes);
 
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
-                return View();
+                ModelState.AddModelError("", ex.Message);
+                CargarCombos();
+                return View("Index", model);
             }
         }
 
-
+        private void CargarCombos()
+        {
+            ViewBag.Eventos = _eventBus.GetAll();
+            ViewBag.Solicitudes = _solicBus.GetAll();
+        }
     }
+
 }
+
