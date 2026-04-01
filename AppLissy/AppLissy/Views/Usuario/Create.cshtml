@@ -1,0 +1,88 @@
+﻿@using AppLissy.Models.Empleado
+@model EmpleadoCreateViewModel
+
+<div class="card-body" style="margin: 25px;">
+    <h4 class="card-title">Crear Usuario</h4>
+    <h4 class="card-description" style="text-align:center"> Ingresar usuario nuevo </h4>
+
+<form asp-action="Create" method="post" class="forms-sample">
+
+    <!-- 🔴 ERRORES GENERALES -->
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label>Identificación</label>
+        <input asp-for="Empleado.NumeroIdentificacion" class="form-control" placeholder="Identificación">
+        <span asp-validation-for="Empleado.NumeroIdentificacion" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Nombres</label>
+        <input asp-for="Empleado.Nombres" class="form-control" placeholder="Nombres">
+        <span asp-validation-for="Empleado.Nombres" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Apellidos</label>
+        <input asp-for="Empleado.Apellidos" class="form-control" placeholder="Apellidos">
+        <span asp-validation-for="Empleado.Apellidos" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Email</label>
+        <input asp-for="Empleado.Correo" class="form-control" placeholder="Email">
+        <span asp-validation-for="Empleado.Correo" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Password</label>
+        <input asp-for="Empleado.Password" type="password" class="form-control" placeholder="Password">
+        <span asp-validation-for="Empleado.Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+    </div>
+
+    <div class="form-group">
+        <label>Fecha Nacimiento</label>
+        <input asp-for="Empleado.FechaNacimiento" type="date" class="form-control">
+        <span asp-validation-for="Empleado.FechaNacimiento" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Fecha Ingreso</label>
+        <input asp-for="Empleado.FechaIngreso" type="date" class="form-control">
+        <span asp-validation-for="Empleado.FechaIngreso" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Cargo</label>
+        <select asp-for="Empleado.CargoId" asp-items="Model.Cargos" class="form-control">
+            <option value="">-- Seleccione Cargo --</option>
+        </select>
+        <span asp-validation-for="Empleado.CargoId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Sede</label>
+        <select asp-for="Empleado.SedeId" asp-items="Model.Sedes" class="form-control">
+            <option value="">-- Seleccione Sede --</option>
+        </select>
+        <span asp-validation-for="Empleado.SedeId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Tipo Contrato</label>
+        <select asp-for="Empleado.TipoContratoId" asp-items="Model.TiposContrato" class="form-control">
+            <option value="">-- Seleccione Tipo Contrato --</option>
+        </select>
+        <span asp-validation-for="Empleado.TipoContratoId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mr-2">Guardar</button>
+    <a asp-action="Index" class="btn btn-dark">Cancelar</a>
+
+</form>
+</div>

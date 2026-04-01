@@ -17,6 +17,7 @@ namespace Business.Dependences
             services.AddScoped<IEmpleadoBusiness, EmpleadoBusiness>();
             services.AddScoped<IEventoBusiness, EventoBusiness>();
             services.AddScoped<ISolicitudesBusiness, SolicitudesBusiness>();
+            services.AddScoped<IUsuarioBusiness, UsuarioBusiness>();
 
             //
             #endregion

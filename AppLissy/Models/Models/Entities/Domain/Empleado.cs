@@ -41,6 +41,10 @@ public partial class Empleado
 
     public bool Activo { get; set; }
 
+    public byte[]? PasswordHash { get; set; }
+
+    public byte[]? PasswordSalt { get; set; }
+
     public DateOnly? FechaRetiro { get; set; }
 
     public string? MotivoRetiro { get; set; }

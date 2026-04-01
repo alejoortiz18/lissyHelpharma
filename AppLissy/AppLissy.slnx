@@ -2,5 +2,6 @@
   <Project Path="AppLissy/AppLissy.csproj" />
   <Project Path="Business/Business/Business.csproj" />
   <Project Path="Data/Data/Data.csproj" />
+  <Project Path="Helper/Helper.csproj" Id="ce2fe086-114e-4e46-83c4-333c2fb2e4c2" />
   <Project Path="Models/Models/Models.csproj" />
 </Solution>

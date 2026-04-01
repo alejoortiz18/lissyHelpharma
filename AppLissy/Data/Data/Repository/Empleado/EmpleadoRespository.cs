@@ -14,51 +14,15 @@ namespace Data.Repository.Empleado
             _context = context;
         }
 
-        //public List<EmpleadoDto> EmpleadoResponseGetAllOld()
-        //{
-        //    try
-        //    {
-        //        var sql = @"
-        //        SELECT E.EmpleadoId AS Id,
-        //               E.TipoIdentificacion,
-        //               E.NumeroIdentificacion,
-        //               E.Nombres,
-        //               E.Apellidos,
-        //               E.Correo,
-        //               E.FechaIngreso,
-        //               E.SuperNum,
-        //               E.FechaRetiro,
-        //               E.FechaNacimiento,
-        //               E.Activo,
-        //               C.Nombre AS Cargo,
-        //               S.Nombre AS Sede,
-        //               S.Ciudad,
-        //               TC.Nombre AS TipoContrato
-        //        FROM dbo.Empleado E
-        //        INNER JOIN dbo.Cargo C ON E.CargoId = C.CargoId
-        //        INNER JOIN dbo.Sede S ON E.SedeId = S.SedeId
-        //        INNER JOIN dbo.TipoContrato TC ON E.TipoContratoId = TC.TipoContratoId";
 
-        //        var response = _context.EmpleadoDto
-        //                .FromSqlRaw(sql)
-        //                .AsNoTracking()
-        //                .ToList();
-
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("Error al consultar empleados: " + ex.Message);
-        //    }
-        //}
         public List<model.Empleado> EmpleadoResponseGetAll()
         {
             try
             {
                 var listUsuario = _context.Empleados
-                    .Include(x=>x.Cargo)
-                    .Include(x=>x.InverseJefe)                    
-                    .Include(x=>x.EventoEmpleadoEmpleados)
+                    .Include(x => x.Cargo)
+                    .Include(x => x.InverseJefe)
+                    .Include(x => x.EventoEmpleadoEmpleados)
                          .AsNoTracking()
                          .ToList();
 
@@ -127,29 +91,90 @@ namespace Data.Repository.Empleado
             }
         }
 
-        public model.Empleado GetEmpleadoCompleto(int id) { 
-        
-        var emp = _context.Empleados.Where(e => e.EmpleadoId == id)
-            .Include(e => e.Cargo)
-            .Include(e => e.Sede)
-            .Include(e => e.TipoContrato)
-            .Include(e => e.Jefe)
-                .ThenInclude(j => j.Cargo)
-            .Include(e => e.InverseJefe)
-                .ThenInclude(ij => ij.Cargo)
-            .Include(e => e.EventoEmpleadoEmpleados)
-                .ThenInclude(z =>z.TipoEventoEmpleado)
-            .Include(e => e.EventoEmpleadoEmpleados)
-                .ThenInclude(q=>q.AutorizadoPorEmpleado)
-            .Include(e => e.HorarioLaboralEmpleados)  
-            .Include(e => e.HorarioLaboralProgramadoPorEmpleados)
-            .Include(e => e.HoraExtras)
-            .Include(e => e.TipoEventoEmpleado)
-            .AsNoTracking()
-            .FirstOrDefault();
+        public model.Empleado GetEmpleadoCompleto(int id)
+        {
+
+            var emp = _context.Empleados.Where(e => e.EmpleadoId == id)
+                .Include(e => e.Cargo)
+                .Include(e => e.Sede)
+                .Include(e => e.TipoContrato)
+                .Include(e => e.Jefe)
+                    .ThenInclude(j => j.Cargo)
+                .Include(e => e.InverseJefe)
+                    .ThenInclude(ij => ij.Cargo)
+                .Include(e => e.EventoEmpleadoEmpleados)
+                    .ThenInclude(z => z.TipoEventoEmpleado)
+                .Include(e => e.EventoEmpleadoEmpleados)
+                    .ThenInclude(q => q.AutorizadoPorEmpleado)
+                .Include(e => e.HorarioLaboralEmpleados)
+                .Include(e => e.HorarioLaboralProgramadoPorEmpleados)
+                .Include(e => e.HoraExtras)
+                .Include(e => e.TipoEventoEmpleado)
+                .AsNoTracking()
+                .FirstOrDefault();
 
             return emp;
 
+        }
+
+        public bool Add(Models.Entities.Domain.Empleado empleado)
+        {
+            try
+            {
+                _context.Empleados.Add(empleado);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al crear empleado: " + ex.Message);
+            }
+        }
+
+        public List<model.Empleado> GetAllComplete()
+        {
+            try
+            {
+                return _context.Empleados
+                    .Include(x => x.Cargo)
+                    .Include(x => x.Sede)
+                    .Include(x => x.TipoContrato)
+                    .Include(x => x.Jefe)
+                        .ThenInclude(j => j.Cargo)
+                    .Include(x => x.InverseJefe)
+                        .ThenInclude(ij => ij.Cargo)
+                    .Include(x => x.EventoEmpleadoEmpleados)
+                        .ThenInclude(z => z.TipoEventoEmpleado)
+                    .Include(x => x.EventoEmpleadoEmpleados)
+                        .ThenInclude(q => q.AutorizadoPorEmpleado)
+                    .Include(x => x.HorarioLaboralEmpleados)
+                    .Include(x => x.HorarioLaboralProgramadoPorEmpleados)
+                    .Include(x => x.HoraExtras)
+                    .Include(x => x.TipoEventoEmpleado)
+                    .AsNoTracking()
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al consultar empleados: " + ex.Message);
+            }
+        }
+
+        public List<model.Empleado> GetAll()
+        {
+            try
+            {
+                var cargosPermitidos = new List<int> { 1, 3, 4, 8 };
+
+                return _context.Empleados
+                    .AsNoTracking()
+                    .Where(e => cargosPermitidos.Contains(e.CargoId))
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al consultar empleados: " + ex.Message);
+            }
         }
     }
 }
