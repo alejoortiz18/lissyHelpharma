@@ -21,10 +21,10 @@ namespace Data.Repository.Evento
         public Models.Entities.Domain.Empleado GetByEmpleadoId(int id)
         {
             var events = _context.Empleados
-                .Include(x=>x.EventoEmpleadoEmpleados)
+                .Include(x=>x.EventoEmpleadoAutorizadoPorEmpleados)
                     .ThenInclude(x=>x.TipoEventoEmpleado)
                 .Include(x=>x.Cargo)
-                .Include(x=>x.TipoEventoEmpleado)
+                .Include(x=>x.EventoEmpleadoAutorizadoPorEmpleados)
                 .Include(x => x.TipoContrato)
                 .Include(x => x.Sede)
                 .Where(x => x.EmpleadoId == id)

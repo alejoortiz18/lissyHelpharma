@@ -53,7 +53,7 @@
 
                         <h3 class="mb-1">
                             @(Model.Datos.Count(x =>
-                                                        x.EventoEmpleadoEmpleados.Any(y =>
+                                                        x.EventoEmpleadoAutorizadoPorEmpleados.Any(y =>
                                                         y.EstadoSolicitudId != 1 &&
                                                         y.EstadoSolicitudId != 7 &&
                                                         y.EstadoSolicitudId != 8)))
@@ -74,7 +74,7 @@
 
                         <h3 class="mb-1">
                             @(Model.Datos.Count(x =>
-                                                        x.EventoEmpleadoEmpleados.Any(y =>
+                                                        x.EventoEmpleadoAutorizadoPorEmpleados.Any(y =>
                                                         y.EstadoSolicitudId == 4 ||
                                                         y.EstadoSolicitudId == 7 ||
                                                         y.EstadoSolicitudId == 8)))
@@ -196,7 +196,7 @@
                                                             </a>
 
                                                             <a class="dropdown-item"
-                                                               asp-controller="EventoEmpleado"
+                                                               asp-controller="Eventos"
                                                                asp-action="Index"
                                                                asp-route-id="@item.EmpleadoId"
                                                                style="transition:0.2s;"

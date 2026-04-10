@@ -32,7 +32,7 @@
                                             <td> @Model.Jefe.Correo </td>
                                                 
                                             <td> 
-                                                @if (@Model.Jefe.EventoEmpleadoEmpleados.FirstOrDefault().TipoEventoEmpleadoId == 1)
+                                                @if (@Model.Jefe.EventoEmpleadoAutorizadoPorEmpleados.FirstOrDefault().TipoEventoEmpleadoId == 1)
                                                 {
                                                     <div class="badge badge-outline-success">Disponible</div>
                                                 }
@@ -117,7 +117,7 @@
                                                 <td>@item.Correo</td>
                                                 <td>
 
-                                                    @if (item.EventoEmpleadoEmpleados.FirstOrDefault()?.TipoEventoEmpleadoId == 1)
+                                                    @if (item.EventoEmpleadoAutorizadoPorEmpleados.FirstOrDefault()?.TipoEventoEmpleadoId == 1)
                                                     {
                                                         <span class="badge badge-outline-success me-2">Disponible</span>
                                                     }

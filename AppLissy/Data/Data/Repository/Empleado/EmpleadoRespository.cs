@@ -22,7 +22,7 @@ namespace Data.Repository.Empleado
                 var listUsuario = _context.Empleados
                     .Include(x => x.Cargo)
                     .Include(x => x.InverseJefe)
-                    .Include(x => x.EventoEmpleadoEmpleados)
+                    .Include(x => x.EventoEmpleadoAutorizadoPorEmpleados)
                          .AsNoTracking()
                          .ToList();
 
@@ -42,7 +42,7 @@ namespace Data.Repository.Empleado
                 var query = _context.Empleados
                     .Include(x => x.Cargo)
                     .Include(x => x.InverseJefe)
-                    .Include(x => x.EventoEmpleadoEmpleados)
+                    .Include(x => x.EventoEmpleadoAutorizadoPorEmpleados)
                     .AsNoTracking();
 
                 var total = query.Count();
@@ -74,12 +74,12 @@ namespace Data.Repository.Empleado
                 var empleado = _context.Empleados
                     .Include(x => x.Cargo)
                     .Include(x => x.Jefe)
-                        .ThenInclude(x => x.EventoEmpleadoEmpleados)
+                        .ThenInclude(x => x.EventoEmpleadoAutorizadoPorEmpleados)
                     .Include(x => x.InverseJefe)
                         .ThenInclude(x => x.Cargo)
                     .Include(x => x.InverseJefe)
-                        .ThenInclude(x => x.EventoEmpleadoEmpleados)
-                    .Include(x => x.EventoEmpleadoEmpleados)
+                        .ThenInclude(x => x.EventoEmpleadoAutorizadoPorEmpleados)
+                    .Include(x => x.EventoEmpleadoAutorizadoPorEmpleados)
                     .AsNoTracking()
                     .FirstOrDefault(x => x.EmpleadoId == id);
 
@@ -93,28 +93,38 @@ namespace Data.Repository.Empleado
 
         public model.Empleado GetEmpleadoCompleto(int id)
         {
+            var emp = _context.Empleados
+                .Where(e => e.EmpleadoId == id)
 
-            var emp = _context.Empleados.Where(e => e.EmpleadoId == id)
                 .Include(e => e.Cargo)
                 .Include(e => e.Sede)
                 .Include(e => e.TipoContrato)
+
                 .Include(e => e.Jefe)
                     .ThenInclude(j => j.Cargo)
+
                 .Include(e => e.InverseJefe)
                     .ThenInclude(ij => ij.Cargo)
-                .Include(e => e.EventoEmpleadoEmpleados)
-                    .ThenInclude(z => z.TipoEventoEmpleado)
-                .Include(e => e.EventoEmpleadoEmpleados)
-                    .ThenInclude(q => q.AutorizadoPorEmpleado)
+
+                .Include(e => e.EventoEmpleados)
+                    .ThenInclude(ev => ev.TipoEventoEmpleado)
+
+                .Include(e => e.EventoEmpleados)
+                    .ThenInclude(ev => ev.EstadoSolicitud)
+
                 .Include(e => e.HorarioLaboralEmpleados)
                 .Include(e => e.HorarioLaboralProgramadoPorEmpleados)
+
                 .Include(e => e.HoraExtras)
-                .Include(e => e.TipoEventoEmpleado)
+                    .ThenInclude(h => h.TipoHoraExtra)
+
+                .Include(e => e.HoraExtras)
+                    .ThenInclude(h => h.EstadoSolicitud)
+
                 .AsNoTracking()
                 .FirstOrDefault();
 
             return emp;
-
         }
 
         public bool Add(Models.Entities.Domain.Empleado empleado)
@@ -143,14 +153,14 @@ namespace Data.Repository.Empleado
                         .ThenInclude(j => j.Cargo)
                     .Include(x => x.InverseJefe)
                         .ThenInclude(ij => ij.Cargo)
-                    .Include(x => x.EventoEmpleadoEmpleados)
+                    .Include(x => x.EventoEmpleadoAutorizadoPorEmpleados)
                         .ThenInclude(z => z.TipoEventoEmpleado)
-                    .Include(x => x.EventoEmpleadoEmpleados)
+                    .Include(x => x.EventoEmpleadoAutorizadoPorEmpleados)
                         .ThenInclude(q => q.AutorizadoPorEmpleado)
                     .Include(x => x.HorarioLaboralEmpleados)
                     .Include(x => x.HorarioLaboralProgramadoPorEmpleados)
                     .Include(x => x.HoraExtras)
-                    .Include(x => x.TipoEventoEmpleado)
+                    .Include(x => x.EventoEmpleadoAutorizadoPorEmpleados)
                     .AsNoTracking()
                     .ToList();
             }

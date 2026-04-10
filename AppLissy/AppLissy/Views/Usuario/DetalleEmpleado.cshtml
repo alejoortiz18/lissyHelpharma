@@ -43,13 +43,13 @@
                         <tr>
                             <th>Estado del usuario</th>
                             <td>
-                                @if (Model.TipoEventoEmpleado.TipoEventoEmpleadoId == 1)
+                                @if (Model.EventoEmpleadoAutorizadoPorEmpleados.FirstOrDefault()?.TipoEventoEmpleadoId == 1)
                                 {
                                     <span class="badge badge-outline-success">Disponible</span>
                                 }
                                 else
                                 {
-                                    <span class="badge badge-outline-danger">@Model.TipoEventoEmpleado.Nombre</span>
+                                    <span class="badge badge-outline-danger">@Model.EventoEmpleadoAutorizadoPorEmpleados.FirstOrDefault()?.TipoEventoEmpleado.Nombre</span>
                                 }
                             </td>
                         </tr>
@@ -109,7 +109,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        @foreach (var item in Model.EventoEmpleadoEmpleados)
+                                        @foreach (var item in Model.EventoEmpleadoAutorizadoPorEmpleados)
                                         {
                                             @if (item.TipoEventoEmpleadoId != 1)
                                             {

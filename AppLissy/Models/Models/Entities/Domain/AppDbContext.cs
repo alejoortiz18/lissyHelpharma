@@ -113,10 +113,6 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.TipoContratoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Empleado_TipoContrato");
-
-            entity.HasOne(d => d.TipoEventoEmpleado).WithMany(p => p.Empleados)
-                .HasForeignKey(d => d.TipoEventoEmpleadoId)
-                .HasConstraintName("FK_Empleado_TipoEventoEmpleado");
         });
 
         modelBuilder.Entity<EstadoSolicitud>(entity =>
@@ -136,6 +132,11 @@ public partial class AppDbContext : DbContext
 
             entity.ToTable("EventoEmpleado");
 
+            entity.HasIndex(e => e.EmpleadoId, "UX_EventoEmpleado_Activo")
+                .IsUnique()
+                .HasFilter("([EsActivo]=(1))");
+
+            entity.Property(e => e.EsActivo).HasDefaultValue(true, "DF_EventoEmpleado_EsActivo");
             entity.Property(e => e.FechaRegistro).HasDefaultValueSql("(sysdatetime())", "DF__EventoEmp__Fecha__6383C8BA");
             entity.Property(e => e.FechaSolicitud).HasDefaultValueSql("(sysdatetime())", "DF__EventoEmp__Fecha__628FA481");
             entity.Property(e => e.Observacion)
@@ -149,10 +150,11 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.AutorizadoPorEmpleadoId)
                 .HasConstraintName("FK_EventoEmpleado_Autoriza");
 
-            entity.HasOne(d => d.Empleado).WithMany(p => p.EventoEmpleadoEmpleados)
-                .HasForeignKey(d => d.EmpleadoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_EventoEmpleado_Empleado");
+            entity.HasOne(d => d.Empleado)
+                 .WithMany(p => p.EventoEmpleados)
+                 .HasForeignKey(d => d.EmpleadoId)
+                 .OnDelete(DeleteBehavior.ClientSetNull)
+                 .HasConstraintName("FK_EventoEmpleado_Empleado");
 
             entity.HasOne(d => d.EstadoSolicitud).WithMany(p => p.EventoEmpleados)
                 .HasForeignKey(d => d.EstadoSolicitudId)

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Models.Entities.Domain;
+﻿namespace Models.Entities.Domain;
 
 public partial class Empleado
 {
@@ -12,8 +9,6 @@ public partial class Empleado
     public int SedeId { get; set; }
 
     public int TipoContratoId { get; set; }
-
-    public int? TipoEventoEmpleadoId { get; set; }
 
     public int? JefeId { get; set; }
 
@@ -55,7 +50,7 @@ public partial class Empleado
 
     public virtual ICollection<EventoEmpleado> EventoEmpleadoAutorizadoPorEmpleados { get; set; } = new List<EventoEmpleado>();
 
-    public virtual ICollection<EventoEmpleado> EventoEmpleadoEmpleados { get; set; } = new List<EventoEmpleado>();
+    public virtual ICollection<EventoEmpleado> EventoEmpleados { get; set; } = new List<EventoEmpleado>();
 
     public virtual ICollection<HoraExtra> HoraExtras { get; set; } = new List<HoraExtra>();
 
@@ -70,6 +65,4 @@ public partial class Empleado
     public virtual Sede Sede { get; set; } = null!;
 
     public virtual TipoContrato TipoContrato { get; set; } = null!;
-
-    public virtual TipoEventoEmpleado? TipoEventoEmpleado { get; set; }
 }

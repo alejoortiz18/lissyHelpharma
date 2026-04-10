@@ -27,6 +27,8 @@ public partial class EventoEmpleado
 
     public DateTime? FechaRegistro { get; set; }
 
+    public bool EsActivo { get; set; }
+
     public virtual Empleado? AutorizadoPorEmpleado { get; set; }
 
     public virtual Empleado Empleado { get; set; } = null!;
