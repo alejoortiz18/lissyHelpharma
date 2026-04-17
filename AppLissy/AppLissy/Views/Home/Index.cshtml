@@ -1,6 +1,8 @@
-﻿@using Models.Dto
+﻿@using AppLissy.Common.Security
+@using Models.Dto
 @using Models.Entities.Domain
 @using Models.Models
+@inject CurrentUser user
 @model Paginacion<Empleado>
 
 @{

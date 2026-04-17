@@ -7,36 +7,33 @@ namespace Helper
 {
     public static class PasswordHelper
     {
-        public static (byte[] Hash, byte[] Salt) EncrypPassword(string password)
+        public static void CrearHashConSalt(string password, out byte[] hash, out byte[] salt)
         {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                salt = hmac.Key;
+                hash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+        public static (byte[] Hash, byte[] Salt) CrearHash(string password)
+        {
+            // Generar salt aleatorio de 16 bytes
             byte[] salt = new byte[16];
-
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(salt);
             }
 
-            using var pbkdf2 = new Rfc2898DeriveBytes(
-                password,
-                salt,
-                10000,
-                HashAlgorithmName.SHA256
-            );
-
-            byte[] hash = pbkdf2.GetBytes(32);
+            // Usar PBKDF2 para crear el hash
+            using var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000, HashAlgorithmName.SHA256);
+            byte[] hash = pbkdf2.GetBytes(32); // 256 bits
 
             return (hash, salt);
         }
 
         public static bool VerificarPassword(string password, byte[] hashGuardado, byte[] saltGuardado)
         {
-            using var pbkdf2 = new Rfc2898DeriveBytes(
-                password,
-                saltGuardado,
-                10000,
-                HashAlgorithmName.SHA256
-            );
-
+            using var pbkdf2 = new Rfc2898DeriveBytes(password, saltGuardado, 10000, HashAlgorithmName.SHA256);
             byte[] hashComparar = pbkdf2.GetBytes(32);
 
             return hashComparar.SequenceEqual(hashGuardado);

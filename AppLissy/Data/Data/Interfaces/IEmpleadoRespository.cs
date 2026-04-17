@@ -12,5 +12,7 @@ namespace Data.Interfaces
         bool Add(Empleado empleado);
 
         List<Empleado> GetAll();
+        Task<Empleado> ObtenerPorCorreo(string correo);
+        Task<bool> GenerarPasswords();
     }
 }

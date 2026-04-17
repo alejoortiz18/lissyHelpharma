@@ -11,5 +11,6 @@ namespace Business.Interfaces
         Empleado EmpleadoGetById(int id);
         Empleado GetEmpleadoCompleto(int id);
         bool Add(EmpleadoDto model);
+        Task<bool> GenerarPasswords();
     }
 }

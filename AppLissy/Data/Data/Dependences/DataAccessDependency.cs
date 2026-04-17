@@ -23,7 +23,7 @@ namespace Data.Dependences
             services.AddScoped<ICargosRepository, CargosRepository>();
             services.AddScoped<ISedesRepository, SedesRepository>();
             services.AddScoped<IContratoRepository, ContratoRepository>();
-            //
+            
             #endregion
 
 

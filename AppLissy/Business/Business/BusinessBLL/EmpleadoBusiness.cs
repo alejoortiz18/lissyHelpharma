@@ -78,7 +78,7 @@ namespace Business.BusinessBLL
         {
             try
             {
-                var (hash, salt) = PasswordHelper.EncrypPassword(model.Password);
+              //  var (hash, salt) = PasswordHelper.EncrypPassword(model.Password);
 
                 var empleado = new Empleado
                 {
@@ -97,8 +97,8 @@ namespace Business.BusinessBLL
 
                     Activo = true,
 
-                    PasswordHash = hash,
-                    PasswordSalt = salt,
+                    //PasswordHash = hash,
+                    //PasswordSalt = salt,
 
                     FechaCreacion = DateTime.Now,
 
@@ -112,6 +112,18 @@ namespace Business.BusinessBLL
             catch (Exception ex)
             {
                 throw new Exception("Error al crear empleado: " + ex.Message);
+            }
+        }
+
+        public Task<bool> GenerarPasswords()
+        {
+            try
+            {
+                return _empleadoRespository.GenerarPasswords();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al generar passwords: " + ex.Message);
             }
         }
     }

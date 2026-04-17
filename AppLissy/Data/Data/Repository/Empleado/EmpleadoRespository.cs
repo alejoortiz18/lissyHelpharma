@@ -1,4 +1,5 @@
 ﻿using Data.Interfaces;
+using Helper;
 using Microsoft.EntityFrameworkCore;
 using Models.Entities.Domain;
 using Models.Models;
@@ -185,6 +186,31 @@ namespace Data.Repository.Empleado
             {
                 throw new Exception("Error al consultar empleados: " + ex.Message);
             }
+        }
+
+        public async Task<model.Empleado> ObtenerPorCorreo(string correo)
+        {
+            return await _context.Empleados
+                .FirstOrDefaultAsync(x => x.Correo == correo);
+        }
+
+        public async Task<bool> GenerarPasswords()
+        {
+            var empleados = _context.Empleados
+                .Where(e => e.PasswordHash == null || e.PasswordSalt == null)
+                .ToList();
+
+            foreach (var emp in empleados)
+            {
+                var (hash, salt) = PasswordHelper.CrearHash("empleado1");
+
+                emp.PasswordHash = hash;
+                emp.PasswordSalt = salt;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return (true);
         }
     }
 }
