@@ -12,5 +12,6 @@ namespace Business.Interfaces
         Empleado GetByEmpleadoId(int id);
         List<TipoEventoEmpleado> GetAll();
         bool Add(EventoEmpleado evento, byte[] archivoBytes);
+        List<EventoEmpleado> GetAllEventos(int empleadoId);
     }
 }

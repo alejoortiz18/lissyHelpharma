@@ -45,37 +45,6 @@ namespace AppLissy.Controllers
         }
 
 
-
-
-        // POST: EventosController/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create(EventoDto model, IFormFile archivo)
-        //{
-        //    try
-        //    {
-        //        model.FechaRegistro = DateTime.Now;
-        //        model.FechaSolicitud = DateTime.Now;
-
-        //        if (archivo != null && archivo.Length > 0)
-        //        {
-        //            var entidad = _mapper.Map<EventoEmpleado>(model);
-
-        //            // 🔥 Enviar a capa de negocio (YA COMO ENTITY)
-        //            _eventBus.Add(entidad, archivo);
-        //        }
-
-
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ModelState.AddModelError("", ex.Message);
-        //        return View(model);
-        //    }
-        //}
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EventoDto model, IFormFile archivo)
@@ -112,6 +81,14 @@ namespace AppLissy.Controllers
                 CargarCombos();
                 return View("Index", model);
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult VerEventos(int EmpleadoId)
+        {
+            var eventos = _eventBus.GetAllEventos(EmpleadoId);
+            return View(eventos);
         }
 
         private void CargarCombos()

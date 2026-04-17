@@ -1,0 +1,112 @@
+﻿@using AppLissy.Common.Security
+@inject CurrentUser user;
+@model List<Models.Entities.Domain.EventoEmpleado>
+
+@{
+    var nombre = Model
+        .Where(x => x.EsActivo)
+        .Select(x => x.TipoEventoEmpleado.Nombre)
+        .FirstOrDefault();
+}
+
+<div class="main-panel">
+    <div class="content-wrapper">
+
+        <!-- 🔹 CARD USUARIO -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-4">
+                <div class="card shadow border-0" style="border-radius:12px;">
+                    <div class="card-body text-center">
+
+                        <h3 class="mb-2 fw-bold">
+                            @Model.Select(x => x.Empleado).Select(x => x.Nombres).FirstOrDefault()
+                        </h3>
+
+                        <span class="badge @(nombre == "Laborando" ? "bg-success" : "bg-danger")" style="font-size:14px;">
+                            @nombre
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🔹 TABLA -->
+        <div class="row justify-content-center">
+            <div class="col-lg-11">
+
+                <div class="card shadow border-0" style="border-radius:12px;">
+                    <div class="card-body">
+
+                        <h4 class="text-center mb-4 fw-bold">
+                            Eventos Generados
+                        </h4>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Evento</th>
+                                        <th>Observación</th>
+                                        <th>Autorizado por</th>
+                                        <th>Inicio</th>
+                                        <th>Fin</th>
+                                        <th>Cargo</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @if (Model != null && Model.Count > 0)
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@item.EmpleadoId</td>
+
+                                                <td>
+                                                    <span class="badge bg-primary">
+                                                        @item.TipoEventoEmpleado.Nombre
+                                                    </span>
+                                                </td>
+
+                                                <td style="max-width:200px;">
+                                                    @item.Observacion
+                                                </td>
+
+                                                <td>
+                                                    @(item.AutorizadoPorEmpleado != null
+                                                        ? item.AutorizadoPorEmpleado.Nombres + " " + item.AutorizadoPorEmpleado.Apellidos
+                                                        : "-")
+                                                </td>
+
+                                                <td>
+                                                    @item.FechaInicio?.ToString("dd/MM/yyyy HH:mm")
+                                                </td>
+
+                                                <td>
+                                                    @(item.FechaFin != null
+                                                        ? item.FechaFin.Value.ToString("dd/MM/yyyy HH:mm")
+                                                        : "-")
+                                                </td>
+
+                                                <td class="text-center">
+                                                    -
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

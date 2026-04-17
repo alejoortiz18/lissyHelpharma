@@ -38,5 +38,10 @@ namespace Business.BusinessBLL
                 return false;
             }
         }
+
+        public List<EventoEmpleado> GetAllEventos(int empleadoId)
+        {
+            return _event.GetAllEventos(empleadoId);
+        }
     }
 }

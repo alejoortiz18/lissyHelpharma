@@ -197,16 +197,19 @@
                                                                 <i class="mdi mdi-eye"></i> Perfil
                                                             </a>
 
-                                                            <a class="dropdown-item"
-                                                               asp-controller="Eventos"
-                                                               asp-action="Index"
-                                                               asp-route-id="@item.EmpleadoId"
-                                                               style="transition:0.2s;"
-                                                               onmouseover="this.style.backgroundColor='#007bff'; this.style.color='white';"
-                                                               onmouseout="this.style.backgroundColor=''; this.style.color='';">
+                                                            <form asp-controller="Eventos" asp-action="VerEventos" method="post" style="display:inline;">
+                                                                @Html.AntiForgeryToken()
+                                                                <input type="hidden" name="EmpleadoId" value="@item.EmpleadoId" />
 
-                                                                <i class="mdi mdi-calendar-alert"></i> Ver Eventos
-                                                            </a>
+                                                                <button type="submit" class="dropdown-item"
+                                                                        style="transition:0.2s;"
+                                                                        onmouseover="this.style.backgroundColor='#007bff'; this.style.color='white';"
+                                                                        onmouseout="this.style.backgroundColor=''; this.style.color='';">
+
+                                                                    <i class="mdi mdi-calendar-alert"></i> Ver Eventos
+                                                                </button>
+
+                                                            </form>
 
                                                             <a class="dropdown-item"
                                                                asp-controller="Eventos"
